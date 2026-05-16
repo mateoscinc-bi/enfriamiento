@@ -3,5 +3,5 @@
 ### Integrantes
 - Mateo Suárez
 - David Mejía
-- Orlando
-- Armando
+- Orlando Durán
+- Armando Granados
