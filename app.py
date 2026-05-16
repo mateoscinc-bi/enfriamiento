@@ -5,20 +5,14 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import time
 
-# ============================================================
 # CONFIGURACIÓN DE PÁGINA
-# ============================================================
-
 st.set_page_config(
     page_title="Simulación de Enfriamiento",
     page_icon="☕",
     layout="wide"
 )
 
-# ============================================================
 # ESTILOS CSS
-# ============================================================
-
 st.markdown(
     """
     <style>
@@ -78,10 +72,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ============================================================
 # TÍTULO
-# ============================================================
-
 st.markdown("""
 <h1>☕ Simulación Interactiva del Enfriamiento de una Bebida</h1>
 """, unsafe_allow_html=True)
@@ -96,10 +87,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ============================================================
 # SIDEBAR
-# ============================================================
-
 st.sidebar.header("⚙ Parámetros de Simulación")
 
 T0 = st.sidebar.slider(
@@ -134,17 +122,11 @@ h = 1
 
 iniciar = st.sidebar.button("▶ Iniciar Simulación")
 
-# ============================================================
 # ECUACIÓN DIFERENCIAL
-# ============================================================
-
 def f(T):
     return -k * (T - Ta)
 
-# ============================================================
 # MÉTODO DE EULER
-# ============================================================
-
 def euler():
 
     tiempos = np.arange(0, Tiempo_total + h, h)
@@ -161,10 +143,7 @@ def euler():
 
     return tiempos, temperaturas
 
-# ============================================================
 # RUNGE-KUTTA 4
-# ============================================================
-
 def rk4():
 
     tiempos = np.arange(0, Tiempo_total + h, h)
@@ -186,38 +165,29 @@ def rk4():
 
     return tiempos, temperaturas
 
-# ============================================================
 # AJUSTE DE CURVAS
-# ============================================================
-
 def modelo_enfriamiento(t, k_ajuste):
     return Ta + (T0 - Ta) * np.exp(-k_ajuste * t)
 
-# ============================================================
 # FUNCIÓN COLOR SEGÚN TEMPERATURA
-# ============================================================
-
 def obtener_color(temp):
 
     if temp >= 80:
-        return "#ff4500"
+        return "#ff0000"
 
     elif temp >= 60:
-        return "#ff7b00"
+        return "#ff5c00"
 
     elif temp >= 40:
-        return "#c97b36"
+        return "#ffd000"
 
     elif temp >= 30:
-        return "#8b5a2b"
+        return "#00bfff"
 
     else:
-        return "#4a2c2a"
+        return "#0000ff"
 
-# ============================================================
 # ESTADO DE LA BEBIDA
-# ============================================================
-
 def estado_bebida(temp):
 
     if temp >= 80:
@@ -232,10 +202,7 @@ def estado_bebida(temp):
     else:
         return "❄ Fría"
 
-# ============================================================
 # INICIAR SIMULACIÓN
-# ============================================================
-
 if iniciar:
 
     tiempos_euler, temp_euler = euler()
@@ -254,10 +221,7 @@ if iniciar:
         k_estimado
     )
 
-    # ========================================================
     # COLUMNAS
-    # ========================================================
-
     col1, col2 = st.columns([1, 2])
 
     taza_placeholder = col1.empty()
@@ -267,10 +231,7 @@ if iniciar:
 
     grafica_placeholder = col2.empty()
 
-    # ========================================================
     # SIMULACIÓN EN TIEMPO REAL
-    # ========================================================
-
     for i in range(len(tiempos_rk4)):
 
         temp_actual = temp_rk4[i]
@@ -279,10 +240,7 @@ if iniciar:
 
         estado = estado_bebida(temp_actual)
 
-        # ====================================================
         # TAZA
-        # ====================================================
-
         taza_placeholder.markdown(
             f'''
             <div class="taza" style="background:{color};"></div>
@@ -290,10 +248,7 @@ if iniciar:
             unsafe_allow_html=True
         )
 
-        # ====================================================
         # ESTADO
-        # ====================================================
-
         estado_placeholder.markdown(
             f'''
             <div class="estado">{estado}</div>
@@ -301,10 +256,7 @@ if iniciar:
             unsafe_allow_html=True
         )
 
-        # ====================================================
         # TEMPERATURA ACTUAL
-        # ====================================================
-
         temp_placeholder.markdown(
             f'''
             <div class="temperatura-box" style="background:{color};">
@@ -315,19 +267,13 @@ if iniciar:
             unsafe_allow_html=True
         )
 
-        # ====================================================
         # TIEMPO
-        # ====================================================
-
         tiempo_placeholder.metric(
             "⏱ Tiempo Transcurrido",
             f"{tiempos_rk4[i]} min"
         )
 
-        # ====================================================
         # GRÁFICA DINÁMICA
-        # ====================================================
-
         fig, ax = plt.subplots(figsize=(9, 5))
 
         ax.plot(
@@ -365,10 +311,7 @@ if iniciar:
 
         time.sleep(0.2)
 
-    # ========================================================
     # TABLA FINAL
-    # ========================================================
-
     st.subheader("📊 Tabla de Resultados")
 
     df = pd.DataFrame({
@@ -380,10 +323,7 @@ if iniciar:
 
     st.dataframe(df)
 
-    # ========================================================
     # RESULTADOS FINALES
-    # ========================================================
-
     st.success(
         f"Constante k estimada por ajuste de curvas: {k_estimado:.4f}"
     )
